@@ -41,6 +41,32 @@ export async function generateQuestions(topic: string, personality: string): Pro
   return JSON.parse(text);
 }
 
+export async function generateTicTacToeComments(personality: string): Promise<string[]> {
+  const response = await ai.models.generateContent({
+    model: "gemini-3-flash-preview",
+    contents: `You are playing Tic Tac Toe against the user. Your personality is: ${personality}.
+    CRITICAL: You MUST be polite, encouraging, and friendly.
+    Generate 5 short (1 sentence) comments you might say when making your move.
+    Return ONLY a valid JSON array of 5 strings. No markdown, no code blocks.`,
+    config: { temperature: 0.7 }
+  });
+  let text = response.text?.replace(/```json/g, '').replace(/```/g, '').trim() || "[]";
+  return JSON.parse(text);
+}
+
+export async function generateTicTacToeEndComment(personality: string, result: 'win' | 'loss' | 'draw'): Promise<string> {
+  const context = result === 'win' ? 'The user won the game.' : result === 'loss' ? 'You (the AI) won the game.' : 'The game was a draw.';
+  const response = await ai.models.generateContent({
+    model: "gemini-3-flash-preview",
+    contents: `You just finished playing Tic Tac Toe against the user. ${context} Your personality is: ${personality}.
+    CRITICAL: You MUST be polite, encouraging, and friendly.
+    Generate a short (1-2 sentences) comment about the end of the game.
+    Return ONLY the text of the comment.`,
+    config: { temperature: 0.7 }
+  });
+  return response.text?.trim() || "Good game!";
+}
+
 export async function generateSpeech(text: string, voiceName: string): Promise<string> {
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-preview-tts",

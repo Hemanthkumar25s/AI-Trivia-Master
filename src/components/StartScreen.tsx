@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { PERSONALITIES } from '../lib/constants';
-import { Brain, Sparkles, User } from 'lucide-react';
+import { Brain, Sparkles, User, Grid3X3 } from 'lucide-react';
 
 interface StartScreenProps {
-  onStart: (topic: string, personalityId: string) => void;
+  onStart: (mode: 'trivia' | 'tictactoe', topic: string, personalityId: string) => void;
 }
 
 export function StartScreen({ onStart }: StartScreenProps) {
+  const [gameMode, setGameMode] = useState<'trivia' | 'tictactoe'>('trivia');
   const [topic, setTopic] = useState('');
   const [selectedPersonality, setSelectedPersonality] = useState(PERSONALITIES[0].id);
 
@@ -21,23 +22,51 @@ export function StartScreen({ onStart }: StartScreenProps) {
         <div className="inline-flex items-center justify-center w-16 h-16 bg-indigo-100 text-indigo-600 rounded-full mb-4">
           <Brain size={32} />
         </div>
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">AI Trivia Master</h1>
-        <p className="text-gray-600">Choose your topic and your host's personality!</p>
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">AI Game Master</h1>
+        <p className="text-gray-600">Choose your game and your host's personality!</p>
       </div>
 
       <div className="space-y-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            What do you want to be quizzed on?
+            Choose Game Mode
           </label>
-          <input
-            type="text"
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            placeholder="e.g., 90s Pop Culture, Quantum Physics, The Beatles..."
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              onClick={() => setGameMode('trivia')}
+              className={`p-4 rounded-xl border-2 text-center transition-all flex flex-col items-center gap-2 ${
+                gameMode === 'trivia' ? 'border-indigo-500 bg-indigo-50 text-indigo-700 font-semibold' : 'border-gray-200 hover:border-indigo-200 text-gray-600'
+              }`}
+            >
+              <Brain size={24} />
+              Trivia
+            </button>
+            <button
+              onClick={() => setGameMode('tictactoe')}
+              className={`p-4 rounded-xl border-2 text-center transition-all flex flex-col items-center gap-2 ${
+                gameMode === 'tictactoe' ? 'border-indigo-500 bg-indigo-50 text-indigo-700 font-semibold' : 'border-gray-200 hover:border-indigo-200 text-gray-600'
+              }`}
+            >
+              <Grid3X3 size={24} />
+              Tic Tac Toe
+            </button>
+          </div>
         </div>
+
+        {gameMode === 'trivia' && (
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
+            <label className="block text-sm font-medium text-gray-700 mb-2 mt-2">
+              What do you want to be quizzed on?
+            </label>
+            <input
+              type="text"
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              placeholder="e.g., 90s Pop Culture, Quantum Physics, The Beatles..."
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+            />
+          </motion.div>
+        )}
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -65,7 +94,7 @@ export function StartScreen({ onStart }: StartScreenProps) {
         </div>
 
         <button
-          onClick={() => onStart(topic || 'General Knowledge', selectedPersonality)}
+          onClick={() => onStart(gameMode, gameMode === 'trivia' ? (topic || 'General Knowledge') : 'Tic Tac Toe', selectedPersonality)}
           className="w-full py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold text-lg flex items-center justify-center gap-2 transition-colors"
         >
           <Sparkles size={24} />
