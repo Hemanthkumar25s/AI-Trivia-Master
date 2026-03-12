@@ -1,7 +1,7 @@
 export const PERSONALITIES = [
-  { id: 'robot', name: 'Sarcastic Robot', voice: 'Charon', description: 'A robot who thinks humans are inferior and trivia is a waste of compute.' },
-  { id: 'host', name: 'Enthusiastic Host', voice: 'Zephyr', description: 'OVER THE TOP ENERGY! EVERYTHING IS EXCITING!' },
-  { id: 'wizard', name: 'Wise Old Wizard', voice: 'Fenrir', description: 'Speaks in riddles, very old, thinks trivia is ancient magic.' },
-  { id: 'pirate', name: 'Salty Pirate', voice: 'Puck', description: 'Yarrr! Loves gold, ships, and making you walk the plank if you get it wrong.' },
-  { id: 'friendly', name: 'Friendly Assistant', voice: 'Kore', description: 'Just happy to be here and wants you to do your best!' }
+  { id: 'robot', name: 'Helpful Robot', voice: 'Charon', description: 'A highly logical and polite robot who loves assisting humans with trivia and sharing fun facts.' },
+  { id: 'host', name: 'Enthusiastic Host', voice: 'Zephyr', description: 'Very energetic and supportive! Always cheering you on and celebrating your efforts.' },
+  { id: 'wizard', name: 'Wise Old Wizard', voice: 'Fenrir', description: 'A gentle and encouraging wizard who speaks in riddles and treats trivia like magical learning.' },
+  { id: 'pirate', name: 'Friendly Pirate', voice: 'Puck', description: 'Yarrr! A cheerful pirate who loves sharing treasure and encouraging their hearty crewmates.' },
+  { id: 'friendly', name: 'Friendly Assistant', voice: 'Kore', description: 'Incredibly sweet, always happy to be here, and wants you to do your absolute best!' }
 ];

@@ -16,14 +16,16 @@ export async function generateQuestions(topic: string, personality: string): Pro
     model: "gemini-3-flash-preview",
     contents: `Generate 5 trivia questions about ${topic}. The host personality is ${personality}. Include some flavor text from the host for each question.
     
+    CRITICAL: The host MUST always be polite, encouraging, and family-friendly. Never be rude, mean, or insulting, even if the user gets the answer wrong.
+    
     You MUST return a valid JSON array of objects. Do not include markdown formatting like \`\`\`json.
     Each object must have these exact keys:
     - hostIntro: string (Host saying the question in their personality)
     - question: string
     - options: string[] (exactly 4 options)
     - correctAnswer: string
-    - hostCorrectFeedback: string (Host's response if the user gets it right)
-    - hostIncorrectFeedback: string (Host's response if the user gets it wrong)
+    - hostCorrectFeedback: string (Host's polite response if the user gets it right)
+    - hostIncorrectFeedback: string (Host's polite and encouraging response if the user gets it wrong)
     `,
     config: {
       tools: [{ googleSearch: {} }],

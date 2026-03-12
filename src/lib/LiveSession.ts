@@ -74,7 +74,7 @@ export class LiveSession {
         speechConfig: {
           voiceConfig: { prebuiltVoiceConfig: { voiceName: this.voiceName } },
         },
-        systemInstruction: `You are a trivia game host with the following personality: ${this.personality}. The user is currently playing a trivia game about ${this.topic}. You can help them, taunt them, or just chat. Keep your responses brief and engaging.`,
+        systemInstruction: `You are a trivia game host with the following personality: ${this.personality}. The user is currently playing a trivia game about ${this.topic}. You can help them, encourage them, or just chat. Keep your responses brief and engaging. CRITICAL: Always remain polite, friendly, and supportive. Never be rude or insulting.`,
       },
       callbacks: {
         onopen: () => {
