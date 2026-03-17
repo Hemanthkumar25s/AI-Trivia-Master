@@ -145,69 +145,97 @@ export function TicTacToeScreen({ personalityId, onRestart }: { personalityId: s
 
   return (
     <div className="max-w-xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
-        <div className="bg-white px-4 py-2 rounded-full shadow-sm font-semibold text-indigo-600">
-          Tic Tac Toe
-        </div>
-        <button
-          onClick={() => setShowLiveModal(true)}
-          className="flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full hover:bg-emerald-200 transition-colors font-medium"
+      <div className="flex flex-col md:flex-row gap-6 mb-8 items-start">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full md:w-48 bg-white rounded-2xl shadow-md p-6 flex flex-col items-center text-center border-b-4 border-indigo-500"
         >
-          <Mic size={18} />
-          Talk to Host
-        </button>
-      </div>
-
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white rounded-3xl shadow-xl p-8 mb-6"
-      >
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <div className={`px-4 py-2 rounded-lg font-bold transition-colors ${isPlayerTurn && !winner ? 'bg-indigo-100 text-indigo-700' : 'text-gray-400'}`}>
-            You (X)
+          <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-3 transition-all duration-500 ${isSpeaking ? 'bg-indigo-600 text-white scale-110 shadow-lg shadow-indigo-200' : 'bg-gray-100 text-gray-400'}`}>
+            <User size={40} />
           </div>
-          <div className="text-gray-300 font-bold">VS</div>
-          <div className={`px-4 py-2 rounded-lg font-bold transition-colors ${!isPlayerTurn && !winner ? 'bg-indigo-100 text-indigo-700' : 'text-gray-400'} ${isSpeaking ? 'animate-pulse bg-indigo-50' : ''}`}>
-            {personality.name} (O)
-          </div>
-        </div>
+          <h3 className="font-bold text-gray-900">{personality.name}</h3>
+          <p className="text-xs text-gray-500 mt-1">Your Opponent</p>
+          {isSpeaking && (
+            <div className="flex gap-1 mt-3">
+              {[1, 2, 3].map(i => (
+                <motion.div
+                  key={i}
+                  animate={{ height: [4, 12, 4] }}
+                  transition={{ repeat: Infinity, duration: 0.5, delay: i * 0.1 }}
+                  className="w-1 bg-indigo-500 rounded-full"
+                />
+              ))}
+            </div>
+          )}
+        </motion.div>
 
-        <div className="grid grid-cols-3 gap-3 max-w-[300px] mx-auto mb-8">
-          {board.map((square, i) => (
+        <div className="flex-1 w-full">
+          <div className="flex justify-between items-center mb-4">
+            <div className="bg-white px-4 py-2 rounded-full shadow-sm font-semibold text-indigo-600">
+              Tic Tac Toe
+            </div>
             <button
-              key={i}
-              disabled={!isPlayerTurn || square !== null || winner !== null || isSpeaking}
-              onClick={() => handleSquareClick(i)}
-              className={`h-24 text-5xl font-bold rounded-xl transition-all flex items-center justify-center
-                ${square === null && isPlayerTurn && !winner && !isSpeaking ? 'bg-gray-50 hover:bg-indigo-50 cursor-pointer' : 'bg-gray-100 cursor-default'}
-                ${square === 'X' ? 'text-indigo-600' : 'text-emerald-600'}
-              `}
+              onClick={() => setShowLiveModal(true)}
+              className="flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full hover:bg-emerald-200 transition-colors font-medium shadow-sm"
             >
-              {square}
+              <Mic size={18} />
+              Talk to Host
             </button>
-          ))}
-        </div>
+          </div>
 
-        {winner && (
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-3xl shadow-xl p-8"
           >
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">
-              {winner === 'Draw' ? "It's a Draw!" : winner === 'X' ? "You Won!" : `${personality.name} Won!`}
-            </h3>
-            <button
-              onClick={onRestart}
-              className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition-colors inline-flex items-center gap-2"
-            >
-              <RefreshCw size={20} />
-              Play Again
-            </button>
+            <div className="flex items-center justify-center gap-4 mb-8">
+              <div className={`px-4 py-2 rounded-lg font-bold transition-colors ${isPlayerTurn && !winner ? 'bg-indigo-100 text-indigo-700' : 'text-gray-400'}`}>
+                You (X)
+              </div>
+              <div className="text-gray-300 font-bold">VS</div>
+              <div className={`px-4 py-2 rounded-lg font-bold transition-colors ${!isPlayerTurn && !winner ? 'bg-indigo-100 text-indigo-700' : 'text-gray-400'}`}>
+                {personality.name} (O)
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 max-w-[280px] mx-auto mb-8">
+              {board.map((square, i) => (
+                <button
+                  key={i}
+                  disabled={!isPlayerTurn || square !== null || winner !== null || isSpeaking}
+                  onClick={() => handleSquareClick(i)}
+                  className={`h-20 sm:h-24 text-4xl sm:text-5xl font-bold rounded-xl transition-all flex items-center justify-center
+                    ${square === null && isPlayerTurn && !winner && !isSpeaking ? 'bg-gray-50 hover:bg-indigo-50 cursor-pointer' : 'bg-gray-100 cursor-default'}
+                    ${square === 'X' ? 'text-indigo-600' : 'text-emerald-600'}
+                  `}
+                >
+                  {square}
+                </button>
+              ))}
+            </div>
+
+            {winner && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center"
+              >
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                  {winner === 'Draw' ? "It's a Draw!" : winner === 'X' ? "You Won!" : `${personality.name} Won!`}
+                </h3>
+                <button
+                  onClick={onRestart}
+                  className="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-semibold transition-colors inline-flex items-center gap-2"
+                >
+                  <RefreshCw size={20} />
+                  Play Again
+                </button>
+              </motion.div>
+            )}
           </motion.div>
-        )}
-      </motion.div>
+        </div>
+      </div>
 
       <AnimatePresence>
         {showLiveModal && (

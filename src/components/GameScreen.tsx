@@ -128,73 +128,99 @@ export function GameScreen({ topic, personalityId, onRestart }: GameScreenProps)
 
   return (
     <div className="max-w-3xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
-        <div className="bg-white px-4 py-2 rounded-full shadow-sm font-semibold text-indigo-600">
-          Question {currentIndex + 1} of {questions.length}
-        </div>
-        <div className="bg-white px-4 py-2 rounded-full shadow-sm font-semibold text-gray-700">
-          Score: {score}
-        </div>
-        <button
-          onClick={() => setShowLiveModal(true)}
-          className="flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full hover:bg-emerald-200 transition-colors font-medium"
+      <div className="flex flex-col md:flex-row gap-6 mb-8 items-start">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full md:w-48 bg-white rounded-2xl shadow-md p-6 flex flex-col items-center text-center border-b-4 border-indigo-500"
         >
-          <Mic size={18} />
-          Talk to Host
-        </button>
-      </div>
-
-      <motion.div 
-        key={currentIndex}
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: -20 }}
-        className="bg-white rounded-2xl shadow-xl p-8 mb-6"
-      >
-        <div className="mb-8">
-          <div className="flex items-start gap-4 mb-6 p-4 bg-gray-50 rounded-xl border border-gray-100">
-            <div className={`p-3 rounded-full ${isSpeaking ? 'bg-indigo-100 text-indigo-600 animate-pulse' : 'bg-gray-200 text-gray-500'}`}>
-              <Mic size={24} />
-            </div>
-            <p className="text-lg text-gray-700 italic mt-2">"{currentQ.hostIntro}"</p>
+          <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-3 transition-all duration-500 ${isSpeaking ? 'bg-indigo-600 text-white scale-110 shadow-lg shadow-indigo-200' : 'bg-gray-100 text-gray-400'}`}>
+            <User size={40} />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900">{currentQ.question}</h2>
-        </div>
+          <h3 className="font-bold text-gray-900">{personality.name}</h3>
+          <p className="text-xs text-gray-500 mt-1">Your AI Host</p>
+          {isSpeaking && (
+            <div className="flex gap-1 mt-3">
+              {[1, 2, 3].map(i => (
+                <motion.div
+                  key={i}
+                  animate={{ height: [4, 12, 4] }}
+                  transition={{ repeat: Infinity, duration: 0.5, delay: i * 0.1 }}
+                  className="w-1 bg-indigo-500 rounded-full"
+                />
+              ))}
+            </div>
+          )}
+        </motion.div>
 
-        <div className="grid grid-cols-1 gap-4">
-          {currentQ.options.map((opt, i) => {
-            const isSelected = selectedAnswer === opt;
-            const isCorrect = opt === currentQ.correctAnswer;
-            const showStatus = selectedAnswer !== null;
-            
-            let btnClass = "p-4 rounded-xl border-2 text-left text-lg font-medium transition-all ";
-            if (!showStatus) {
-              btnClass += "border-gray-200 hover:border-indigo-500 hover:bg-indigo-50 text-gray-700";
-            } else if (isCorrect) {
-              btnClass += "border-green-500 bg-green-50 text-green-700";
-            } else if (isSelected && !isCorrect) {
-              btnClass += "border-red-500 bg-red-50 text-red-700";
-            } else {
-              btnClass += "border-gray-200 opacity-50 text-gray-500";
-            }
+        <div className="flex-1 w-full">
+          <div className="flex justify-between items-center mb-4">
+            <div className="bg-white px-4 py-2 rounded-full shadow-sm font-semibold text-indigo-600">
+              Question {currentIndex + 1} of {questions.length}
+            </div>
+            <div className="bg-white px-4 py-2 rounded-full shadow-sm font-semibold text-gray-700">
+              Score: {score}
+            </div>
+            <button
+              onClick={() => setShowLiveModal(true)}
+              className="flex items-center gap-2 bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full hover:bg-emerald-200 transition-colors font-medium shadow-sm"
+            >
+              <Mic size={18} />
+              Talk to Host
+            </button>
+          </div>
 
-            return (
-              <button
-                key={i}
-                disabled={showStatus || isSpeaking}
-                onClick={() => handleAnswer(opt)}
-                className={btnClass}
-              >
-                <div className="flex justify-between items-center">
-                  <span>{opt}</span>
-                  {showStatus && isCorrect && <CheckCircle2 className="text-green-500" />}
-                  {showStatus && isSelected && !isCorrect && <XCircle className="text-red-500" />}
-                </div>
-              </button>
-            );
-          })}
+          <motion.div 
+            key={currentIndex}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="bg-white rounded-2xl shadow-xl p-8"
+          >
+            <div className="mb-8">
+              <div className="mb-6 p-4 bg-indigo-50 rounded-xl border border-indigo-100 relative">
+                <div className="absolute -left-2 top-4 w-4 h-4 bg-indigo-50 border-l border-t border-indigo-100 rotate-45"></div>
+                <p className="text-lg text-indigo-900 italic">"{currentQ.hostIntro}"</p>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 leading-tight">{currentQ.question}</h2>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3">
+              {currentQ.options.map((opt, i) => {
+                const isSelected = selectedAnswer === opt;
+                const isCorrect = opt === currentQ.correctAnswer;
+                const showStatus = selectedAnswer !== null;
+                
+                let btnClass = "p-4 rounded-xl border-2 text-left text-lg font-medium transition-all ";
+                if (!showStatus) {
+                  btnClass += "border-gray-100 hover:border-indigo-500 hover:bg-indigo-50 text-gray-700 hover:shadow-md";
+                } else if (isCorrect) {
+                  btnClass += "border-green-500 bg-green-50 text-green-700 shadow-sm";
+                } else if (isSelected && !isCorrect) {
+                  btnClass += "border-red-500 bg-red-50 text-red-700 shadow-sm";
+                } else {
+                  btnClass += "border-gray-50 opacity-50 text-gray-400";
+                }
+
+                return (
+                  <button
+                    key={i}
+                    disabled={showStatus || isSpeaking}
+                    onClick={() => handleAnswer(opt)}
+                    className={btnClass}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span>{opt}</span>
+                      {showStatus && isCorrect && <CheckCircle2 className="text-green-500" />}
+                      {showStatus && isSelected && !isCorrect && <XCircle className="text-red-500" />}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
 
       <AnimatePresence>
         {showLiveModal && (
