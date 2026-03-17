@@ -1,6 +1,6 @@
 {
-  "name": "AI Trivia Master",
-  "description": "A dynamic trivia game featuring an AI host with customizable personalities, powered by Gemini 3.1 Pro, Search Grounding, TTS, and Live API.",
+  "name": "AI Game Master",
+  "description": "A dynamic AI-powered game hub featuring Trivia and Tic Tac Toe with customizable polite personalities, background music, and live voice interaction. Optimized for Vercel and Cloud Run.",
   "requestFramePermissions": [
     "microphone"
   ]

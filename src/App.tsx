@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { StartScreen } from './components/StartScreen';
 import { GameScreen } from './components/GameScreen';
 import { TicTacToeScreen } from './components/TicTacToeScreen';
+import { BackgroundMusic } from './components/BackgroundMusic';
 
 export default function App() {
   const [gameState, setGameState] = useState<'start' | 'playing'>('start');
@@ -26,7 +27,9 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 font-sans relative">
+      <BackgroundMusic />
+      
       {gameState === 'start' ? (
         <StartScreen onStart={handleStart} />
       ) : gameMode === 'trivia' ? (
